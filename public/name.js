@@ -19,7 +19,7 @@
   var message = "",
       messageTime = "",
       user = name,
-      userId = 4; //CHNAGEE
+      userId = 4; 
 
 
 //remove name input
