@@ -1,6 +1,11 @@
 //var name = "";
+
+
+
  function contactus() {
     var name = "";
+
+
 
 
   document.getElementById("nameHidden").value = document.forms["nameForm"]["name"].value;
@@ -23,8 +28,22 @@
 
 
 //remove name input
-  //$("#name").remove();
-  //$("#enterButton").remove();
+  $("#name").remove();
+  $("#enterButton").remove();
+
+  //add input for message
+
+  var newdiv = document.createElement('div');
+    newdiv.innerHTML = "<form id='messagesForm' action=''><input id='message' autocomplete='off' /><button>Send</button></form>"; 
+
+
+
+    // "<ul id='messages'></ul>
+    // <form id='messagesForm' action=''>
+    //   <input id='message' autocomplete='off' /><button>Send</button>
+    // </form>";
+    document.getElementById("aa").appendChild(newdiv);
+
 
 
 
@@ -32,7 +51,7 @@
   $('form').submit(function(){
     message = $('#message').val();
     messageTime = "4:05";
-    user = name;
+    user = document.getElementById("nameHidden").value;
     socket.emit('chat message', {message : message, messageTime : messageTime, user : user,userId: userId});
     $('#message').val('');
     return false;
