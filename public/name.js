@@ -3,22 +3,28 @@
 
 
  function contactus() {
+
     var name = "";
-
-
-
-
   document.getElementById("nameHidden").value = document.forms["nameForm"]["name"].value;
 
+  console.log("hellow  from client");
   var socket = io();
-  $('form').submit(function(){
-    socket.emit('name given', $('#name').val());
-    $('#name').val('');
-    name = document.getElementById("nameHidden").value;
+  // $('nameForm').submit(function(){
+  //   console.log('Name form submitted');
+  //   socket.emit('name given', $('#name').val());
+  //   $('#name').val('');
+  //   name = document.getElementById("nameHidden").value;
+  //   console.log(name);
+  //   return false;
+  // });
+  name = document.getElementById("nameHidden").value;
+  socket.emit('name given', name);
 
-    console.log(name);
-    return false;
+  socket.on('oldMessages', function(msg){
+
+    $('#messages').append($('<li>').text(msg.user + ' ' + msg.message + ' at ' + msg.messageTime));
   });
+
 
 //have name. start chat
   var message = "",
@@ -31,13 +37,12 @@
   $("#name").remove();
   $("#enterButton").remove();
 
+
+
   //add input for message
 
   var newdiv = document.createElement('div');
     newdiv.innerHTML = "<form id='messagesForm' action=''><input id='message' autocomplete='off' /><button>Send</button></form>"; 
-
-
-
     // "<ul id='messages'></ul>
     // <form id='messagesForm' action=''>
     //   <input id='message' autocomplete='off' /><button>Send</button>
@@ -46,20 +51,24 @@
 
 
 
+     
+
+
+    
 
 
   $('form').submit(function(){
     message = $('#message').val();
-    messageTime = "4:05";
+    messageTime = new Date();
     user = document.getElementById("nameHidden").value;
-    socket.emit('chat message', {message : message, messageTime : messageTime, user : user,userId: userId});
+    socket.emit('chat message', {message : message, messageTime : messageTime.toUTCString(), user : user,userId: userId});
     $('#message').val('');
     return false;
   });
 
 
   socket.on('chat message', function(msg){
-    $('#messages').append($('<li>').text(msg.user + ' ' + msg.message));
+    $('#messages').append($('<li>').text(msg.user + ' ' + msg.message + ' at ' + msg.messageTime));
   });
   
   }
