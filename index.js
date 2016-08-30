@@ -46,7 +46,7 @@ var insertDocument = function(db, message, userName, messageTime, callback) {
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
-  res.sendfile('chat.html');
+  res.sendfile('Chat_box.html');
 });
 
 // app.get('/index.html', function(req, res){
