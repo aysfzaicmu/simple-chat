@@ -1,45 +1,17 @@
-//var app = require('express')();
 var express = require("express"),
     app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-//DB Stuff
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://localhost/MessagesDB';
 
 
 var insertDocument = function(db, message, userName, messageTime, callback) {
    db.collection('messages').insertOne( {"message":message,"user":userName, "messageTime" :messageTime}, function(err, result) {
-    //assert.equal(err, null);
-    console.log("Inserted a document into the restaurants collection.");
     callback();
   });
 };
-
-
-// MongoClient.connect(url, function(err, db) {
-//   if (err) {
-//       throw err
-//     }
-//   else {
-//     console.log("connected to db");
-//     insertDocument(db,"Woo","fewf", function() {
-//   });
-
-//     console.log("DB contains");
-//     var cursor = db.collection('messages').find();
-
-//     cursor.each(function(err,doc){
-//       console.log(doc);
-
-//     });
-
-//   db.close();
-//   }
-
-  
-// });
 
 
 
@@ -49,10 +21,9 @@ app.get('/', function(req, res){
   res.sendfile('Chat_box.html');
 });
 
-// app.get('/index.html', function(req, res){
-//   res.sendfile('index.html');
-// });
-
+app.get('/exitChat', function(req, res){
+  res.sendfile('exit_page.html');
+});
 
 
 io.on('connection', function(socket){
@@ -61,9 +32,7 @@ io.on('connection', function(socket){
 	socket.on('name given', function(msg){
 
 		console.log('From server: Got name ' + msg);
-    //io.emit('oldMessages','blah blah');
     console.log("socket id is " + socket.id);
-    //io.sockets.connected[socket.id].emit('oldMessages','blwah blah');
     //get old messages
     MongoClient.connect(url, function(err, db) {
       if (err) {
@@ -87,12 +56,7 @@ io.on('connection', function(socket){
 
       db.close();
       }
-
-      
     });
-
-
-
   });
 
 
@@ -107,29 +71,13 @@ io.on('connection', function(socket){
       else {
         console.log("connected to db");
         insertDocument(db,msg.message,msg.user,msg.messageTime, function() {
-
       });
-
-        console.log("DB contains");
-        var cursor = db.collection('messages').find();
-
-        cursor.each(function(err,doc){
-          console.log(doc);
-
-        });
-
       db.close();
-      }
-
-      
+      }      
     });
-
-
-
     io.emit('chat message', msg);
   });
 });
-
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

@@ -1,12 +1,4 @@
-//var name = "";
-
-
-
-
-
-
-
- function contactus() {
+ function nameEntered() {
 
 console.log("hellow  from client");
     var name = "";
@@ -22,8 +14,8 @@ console.log("hellow  from client");
   //Add welcome to FSE heading
   var heading = document.createElement('div');
   heading.className="portlet-heading";
-  heading.innerHTML = "<div class='clearfix'></div><h4><i class='fa fa-circle text-green'></i> \
-   FSE Chat Room</h4><div class='clearfix'></div>";
+  heading.innerHTML = "<div class='clearfix'></div><h4><i class='fa fa-circle text-green'></i>FSE Chat Room \
+  <a class='right1' href='/exitChat'>Exit Chat</a></h4><div class='clearfix'></div>";
   document.getElementById("heading2").appendChild(heading);
 
 
@@ -38,35 +30,18 @@ console.log("hellow  from client");
   //add input for message
 
   var newdiv = document.createElement('div');
-    //newdiv.innerHTML = "<form id='messagesForm' action=''><input id='message' autocomplete='off' /><button>Send</button></form>"; 
-    //document.getElementById("aa").appendChild(newdiv);
     newdiv.className = "portlet-footer";
     newdiv.innerHTML = "<form id='messageForm'><input id='message' class='form-control' placeholder='Enter message...'/><button id='messageButton' class='btn btn-default pull-right'>Send</button><div class='clearfix'></div></form>";
-
     document.getElementById("messages").appendChild(newdiv);
      
 
   
   var socket = io();
-  // $('nameForm').submit(function(){
-  //   console.log('Name form submitted');
-  //   socket.emit('name given', $('#name').val());
-  //   $('#name').val('');
-  //   name = document.getElementById("nameHidden").value;
-  //   console.log(name);
-  //   return false;
-  // });
   name = document.getElementById("nameHidden").value;
   socket.emit('name given', name);
 
-  //make necessary changes to dom
-
-
-
-
 
   socket.on('oldMessages', function(msg){
-
   var messDiv = document.createElement('div');
   messDiv.className = "row";
   messDiv.innerHTML = "<div class='col-lg-12'> \
@@ -79,20 +54,13 @@ console.log("hellow  from client");
   </div>  \
   <hr>";
   document.getElementById("messages2").appendChild(messDiv);
-
   });
 
 
-//have name. start chat
   var message = "",
       messageTime = "",
       user = name,
       userId = 4; 
-
-
-
-    
-
 
   $('form').submit(function(){
     console.log("message entered:");
@@ -100,16 +68,15 @@ console.log("hellow  from client");
     var d = new Date();
     messageTime = d.toLocaleString();;
     user = document.getElementById("nameHidden").value;
-    socket.emit('chat message', {message : message, messageTime : messageTime, user : user,userId: userId});
+    socket.emit('chat message', {message : message, messageTime : messageTime, user : user});
     $('#message').val('');
     return false;
   });
 
 
   socket.on('chat message', function(msg){
-    console.log("got a chat noti from server");
-    //$('#messages').append($('<li>').text(msg.user + ' ' + msg.message + ' at ' + msg.messageTime));
-   var newMessDiv = document.createElement('div');
+  console.log("got a chat notification from server");
+  var newMessDiv = document.createElement('div');
   newMessDiv.className = "row";
   newMessDiv.innerHTML = "<div class='col-lg-12'> \
   <div class='media-body'> \
@@ -121,11 +88,11 @@ console.log("hellow  from client");
   </div>  \
   <hr>";
    document.getElementById("messages2").appendChild(newMessDiv);
-
-
   });
   
   }
+
+
 
 
 
